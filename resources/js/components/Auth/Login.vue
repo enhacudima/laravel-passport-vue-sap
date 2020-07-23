@@ -60,6 +60,7 @@ export default {
     return {
       testError:'',
       country:'',
+      user_id:'',
     };
   },
   beforeCreate() {
@@ -89,6 +90,22 @@ export default {
         var errors =null;
         var status=err.response.status;
         //console.log(status);
+            if (status == 403){
+             var inval=err.response.data.error;
+             this.form.setFields({
+                                  "userName": {
+                                    "errors": [
+                                      {
+                                        "message": inval,
+                                        "field": "userName"
+                                      }
+                                    ]
+                                  }
+                                });
+                this.user_id=err.response.data.id;
+
+                this.openVerifyNotification();
+            }
             if (status == 422){
              const {
                     errors
@@ -115,7 +132,7 @@ export default {
                                     });
               }
              if (err.response.data.error) {
-              var inval=err.response.data.error;
+             var inval=err.response.data.error;
              this.form.setFields({
                                   "userName": {
                                     "errors": [
@@ -127,7 +144,7 @@ export default {
                                   }
                                 });
               }
-          }else{
+          }if (status != 422 && status != 403){
             this.openNotification('error','Error during login','Please contact admin web-site');
           }
         })
@@ -144,6 +161,41 @@ export default {
           description: d,
         });
     },
+    closeNotification(key){  
+        axios
+        .get('email/verify')
+        .then(response => (this.openNotification('error','Error during login','Please contact admin web-site')));
+        this.$notification.close(key)
+    },
+    openVerifyNotification() {
+      const key = `open${Date.now()}`;
+      this.$notification.open({
+        message: 'Email verification',
+        placement:'bottomRight',
+        description:
+          'You can click resend to verify your email.',
+        btn: h => {
+          return h(
+            'a-button',
+            {
+              props: {
+                type: 'primary',
+                size: 'small',
+              },
+              on: {
+                click: () => this.closeNotification(key),
+              },
+            },
+            'Resend',
+          );
+        },
+        key,
+        onClose: close,
+        duration: 0,
+
+      });
+    },
+
   },
 };
 </script>

@@ -296,7 +296,7 @@ export default {
 	        } else {
 	            
 	            this.openNotification('success', 'Save', 'You have been store all data successfully');
-	            this.$router.push({ name: 'home' })
+	            this.$router.push({ name: 'register/result' });
 	        }
 	    })
 	    .catch((error) => {

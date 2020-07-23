@@ -4,12 +4,24 @@ import Login from './components/Auth/Login.vue';
 import Register from './components/Auth/Register.vue';
 import UserEdit from './components/Auth/UserEdit.vue';
 import ForgotPassword from './components/Auth/ForgotPassword.vue';
+import RegisterResult from './components/Auth/RegisterResult.vue';
+import VerifyResult from './components/Auth/VerifyResult.vue';
 
 export const routes = [
     {
         name: 'welcome',
         path: '/',
         component: Welcome
+    },
+    {
+        name: 'register/result',
+        path: '/registerResult',
+        component: RegisterResult
+    },
+    {
+        name: 'verifyResult',
+        path: '/verifyResult',
+        component: VerifyResult
     },
     {
         name: 'login',
