@@ -61,6 +61,8 @@ export default {
       testError:'',
       country:'',
       user_id:'',
+      allerros:'',
+      sucess:'',
     };
   },
   beforeCreate() {
@@ -163,8 +165,30 @@ export default {
     },
     closeNotification(key){  
         axios
-        .get('email/verify')
-        .then(response => (this.openNotification('error','Error during login','Please contact admin web-site')));
+        .post('email/resend', { data: { id: this.user_id} })
+        .then(response => {
+            this.allerros = [];
+            this.sucess = true;
+            if (response.data.errors) {
+                response.data.errors.forEach(error => { this.openNotification('error', 'Error on resend', error);});
+                
+            } else {
+                
+                this.openNotification('success', 'Resend', 'You have been resend link successfully');
+            }
+        })
+      .catch((error) => {
+        this.success = false;
+        var errors =null;
+        var status=error.response.status;
+            if (status == 422){
+            errors=error.response.data.errors;
+            errors.forEach(error => { this.openNotification('error', 'Error on resend', error);});
+          }else{
+            this.openNotification('error','Error on resend',error.response.data['error']);
+          }
+      });
+
         this.$notification.close(key)
     },
     openVerifyNotification() {

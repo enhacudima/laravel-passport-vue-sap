@@ -19,7 +19,7 @@ Route::get('getCountry','ProvinceStatesController@getCountry');
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
 	Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify'); // Make sure to keep this as your route name
-	Route::get('email/resend', 'VerificationController@resend')->name('verification.resend');
+	Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 	Route::post('login', 'AuthController@login');
 });
 
